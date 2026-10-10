@@ -78,6 +78,8 @@ def _load_model(
             model_size_or_path,
             device=device,
             compute_type=compute_type,
+            cpu_threads=2,       # cap threads so Render's single vCPU isn't thrashed
+            num_workers=1,
         )
 
         _model_info.update({
@@ -133,8 +135,8 @@ class STTService:
         self,
         audio_data: bytes,
         language: Optional[str] = None,
-        beam_size: int = 5,
-        best_of: int = 5,
+        beam_size: int = 1,
+        best_of: int = 1,
         temperature: float = 0.0,
     ) -> Dict[str, Any]:
         """
@@ -207,10 +209,11 @@ class STTService:
                     beam_size=beam_size,
                     best_of=best_of,
                     temperature=temperature,
-                    vad_filter=True,          # filter out silence
+                    vad_filter=True,
                     vad_parameters=dict(
-                        min_silence_duration_ms=500,
+                        min_silence_duration_ms=300,
                     ),
+                    condition_on_previous_text=False,  # saves memory on longer audio
                 )
 
                 segments = []
