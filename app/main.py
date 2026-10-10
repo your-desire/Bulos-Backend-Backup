@@ -16,6 +16,7 @@ from app.routers import (
     evaluation_router,
     alphabet_router,
     audio_router,
+    stt_router,
 )
 
 configure_logging()
@@ -72,6 +73,13 @@ async def lifespan(app: FastAPI):
         audio = get_audio_storage()
         if audio.is_available:
             logger.info("[AudioStorage] Connected — GridFS ready")
+
+            # Sync existing GridFS audio files into training pairs
+            sync_stats = await audio.sync_existing_audio_to_training_pairs()
+            logger.info(
+                f"Audio training data: {sync_stats['total_files']} files, "
+                f"{sync_stats['newly_created']} new pairs synced"
+            )
         else:
             logger.warning(
                 "[AudioStorage] Not available — MONGODB_URI may not be set. "
@@ -79,6 +87,21 @@ async def lifespan(app: FastAPI):
             )
     except Exception as e:
         logger.warning(f"Audio storage connection failed at startup: {e}")
+
+    # Load STT model
+    if settings.stt_enabled:
+        try:
+            logger.info(f"Loading STT model: {settings.stt_model_path}...")
+            from services.stt_service import initialize_stt_service
+            initialize_stt_service(
+                model_size_or_path=settings.stt_model_path,
+                device=settings.stt_device,
+                compute_type=settings.stt_compute_type,
+            )
+            logger.info("STT model loaded successfully")
+        except Exception as e:
+            logger.warning(f"STT model loading failed: {e}")
+            logger.warning("Transcription endpoints will return 503 until model is loaded")
 
     logger.info("Application startup complete")
 
@@ -197,6 +220,21 @@ def create_application() -> FastAPI:
             "per_key_errors": getattr(opus, "per_key_errors", {}),
         }
 
+    @app.get("/debug/stt", tags=["Debug"])
+    async def debug_stt():
+        """Shows STT model status and training data stats."""
+        from services.stt_service import get_model_info
+        info = get_model_info()
+        try:
+            from services.audio_storage import get_audio_storage
+            storage = get_audio_storage()
+            info["training_pairs_total"] = await storage.count_training_pairs("bul")
+            info["training_pairs_validated"] = await storage.count_training_pairs("bul", validated_only=True)
+            info["total_audio_files"] = await storage.count_audio_files()
+        except Exception:
+            info["audio_storage"] = "not_available"
+        return info
+
     @app.get("/", tags=["Root"])
     async def root():
         return {"message": f"Welcome to {settings.app_name}",
@@ -211,6 +249,7 @@ def create_application() -> FastAPI:
     app.include_router(evaluation_router)
     app.include_router(alphabet_router)
     app.include_router(audio_router)
+    app.include_router(stt_router)
 
     return app
 
