@@ -311,7 +311,8 @@ def main():
     errors = 0
 
     for i, audio_path in enumerate(sample, 1):
-        expected    = re.sub(r"[^\w\s]", "", audio_path.stem)  # strip punctuation        subfolder   = audio_path.parent.name   # immediate parent folder name
+        expected    = re.sub(r"[^\w\s]", "", audio_path.stem)  # strip punctuation
+        subfolder   = audio_path.parent.name   # immediate parent folder name
         relative    = audio_path.relative_to(AUDIOS_DIR)
 
         sys.stdout.write(

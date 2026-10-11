@@ -198,61 +198,69 @@ class STTService:
         """Synchronous transcription — runs in executor."""
         model = _get_model()
 
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
             tmp.write(audio_data)
-            tmp.flush()
+            tmp_path = tmp.name
 
+        try:
+            segments_gen, info = model.transcribe(
+                tmp_path,
+                language=whisper_lang,
+                beam_size=beam_size,
+                best_of=best_of,
+                temperature=temperature,
+                vad_filter=True,
+                vad_parameters=dict(
+                    min_silence_duration_ms=300,
+                ),
+                condition_on_previous_text=False,
+            )
+
+            segments = []
+            full_text_parts = []
+            for seg in segments_gen:
+                segments.append({
+                    "start": round(seg.start, 2),
+                    "end": round(seg.end, 2),
+                    "text": seg.text.strip(),
+                })
+                full_text_parts.append(seg.text.strip())
+
+            full_text = " ".join(full_text_parts)
+
+            logger.info(
+                f"Transcription complete: lang={info.language} "
+                f"prob={info.language_probability:.2f} "
+                f"duration={info.duration:.1f}s "
+                f"text='{full_text[:80]}...'"
+            )
+
+            return {
+                "text": full_text,
+                "segments": segments,
+                "language": info.language,
+                "language_probability": round(info.language_probability, 3),
+                "duration": round(info.duration, 2),
+            }
+
+        except Exception as e:
+            logger.error(f"Transcription failed: {e}", exc_info=True)
+            return {
+                "text": "",
+                "segments": [],
+                "language": whisper_lang or "unknown",
+                "language_probability": 0.0,
+                "duration": 0.0,
+                "error": str(e),
+            }
+        finally:
+            # Always clean up the temp file — Windows requires delete=False
+            # because it can't open an already-open file from another process
             try:
-                segments_gen, info = model.transcribe(
-                    tmp.name,
-                    language=whisper_lang,
-                    beam_size=beam_size,
-                    best_of=best_of,
-                    temperature=temperature,
-                    vad_filter=True,
-                    vad_parameters=dict(
-                        min_silence_duration_ms=300,
-                    ),
-                    condition_on_previous_text=False,
-                )
-
-                segments = []
-                full_text_parts = []
-                for seg in segments_gen:
-                    segments.append({
-                        "start": round(seg.start, 2),
-                        "end": round(seg.end, 2),
-                        "text": seg.text.strip(),
-                    })
-                    full_text_parts.append(seg.text.strip())
-
-                full_text = " ".join(full_text_parts)
-
-                logger.info(
-                    f"Transcription complete: lang={info.language} "
-                    f"prob={info.language_probability:.2f} "
-                    f"duration={info.duration:.1f}s "
-                    f"text='{full_text[:80]}...'"
-                )
-
-                return {
-                    "text": full_text,
-                    "segments": segments,
-                    "language": info.language,
-                    "language_probability": round(info.language_probability, 3),
-                    "duration": round(info.duration, 2),
-                }
-
-            except Exception as e:
-                logger.error(f"Transcription failed: {e}", exc_info=True)
-                return {
-                    "text": "",
-                    "segments": [],
-                    "language": whisper_lang or "unknown",
-                    "language_probability": 0.0,
-                    "duration": 0.0,
-                    "error": str(e),
-                }
+                import os
+                os.unlink(tmp_path)
+            except OSError:
+                pass
 
     async def detect_language(self, audio_data: bytes) -> Dict[str, Any]:
         """
