@@ -78,7 +78,7 @@ def _load_model(
             model_size_or_path,
             device=device,
             compute_type=compute_type,
-            cpu_threads=2,       # cap threads so Render's single vCPU isn't thrashed
+            cpu_threads=2,
             num_workers=1,
         )
 
@@ -213,7 +213,7 @@ class STTService:
                     vad_parameters=dict(
                         min_silence_duration_ms=300,
                     ),
-                    condition_on_previous_text=False,  # saves memory on longer audio
+                    condition_on_previous_text=False,
                 )
 
                 segments = []

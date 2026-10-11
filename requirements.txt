@@ -27,6 +27,9 @@ ctranslate2==4.4.0
 transformers==4.40.2
 sentencepiece==0.2.0
 
+# ML — Speech-to-Text (Whisper via faster-whisper)
+faster-whisper==1.1.0
+
 # STT — Whisper inference (CTranslate2-based, fast CPU inference)
 faster-whisper==1.1.0
 
