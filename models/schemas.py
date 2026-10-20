@@ -94,6 +94,14 @@ class TranslationResponse(BaseModel):
     confidence: Optional[float] = Field(None, ge=0.0, le=1.0)
     intermediate_language: Optional[str] = None
     translation_method: Optional[str] = None
+    grammar_status: Optional[str] = Field(
+        None, 
+        description="Grammar validation status: 'verified', 'unverified', 'no_rules', 'not_applicable'"
+    )
+    applied_rule: Optional[str] = Field(
+        None,
+        description="ID of the grammar rule applied (if any)"
+    )
 
     class Config:
         json_schema_extra = {
@@ -103,7 +111,9 @@ class TranslationResponse(BaseModel):
                 "source_language": "en", "target_language": "tl",
                 "confidence": 0.95,
                 "intermediate_language": None,
-                "translation_method": "google"
+                "translation_method": "google",
+                "grammar_status": "not_applicable",
+                "applied_rule": None
             }
         }
 
