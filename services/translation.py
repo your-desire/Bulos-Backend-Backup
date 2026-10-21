@@ -54,7 +54,7 @@ def _get_opus():
 # ---------------------------------------------------------------------------
 
 FUZZY_THRESHOLD         = 0.75  # step 3 ΓÇö strict
-FUZZY_THRESHOLD_LENIENT = 0.50  # step 4 bul ΓÇö lenient
+FUZZY_THRESHOLD_LENIENT = 0.70  # step 4 bul ΓÇö lenient (raised from 0.50 to reject false positives like "hello"ΓåÆ"beloy")
 FUZZY_MIN_LEN           = 3     # skip tokens shorter than this
 
 # Google Translate language codes
@@ -514,9 +514,15 @@ class TranslationService:
             logger.info("[bul pipeline] exit Step 3")
             return {k: s3[k] for k in ("translated_text", "confidence", "translation_method")}
 
-        # Step 4 ΓÇö lenient fuzzy (OPUS has no Bulos support)
-        logger.info("[bul pipeline] Step 4 ΓÇö lenient fuzzy")
+        # Step 4 — lenient fuzzy (OPUS has no Bulos support)
+        logger.info("[bul pipeline] Step 4 — lenient fuzzy")
         s4 = self._fuzzy_pass(s3, lang_pair, FUZZY_THRESHOLD_LENIENT, "Step 4")
+        
+        # Cap confidence for lenient matches to indicate they're less certain than strict/exact matches
+        if s4["translation_method"] in ("fuzzy_match", "fuzzy_match_partial") and s4["confidence"] > 0:
+            s4["confidence"] = min(s4["confidence"], 0.90)
+            logger.info(f"[bul pipeline] Lenient fuzzy match confidence capped at {s4['confidence']:.2f}")
+        
         return {k: s4[k] for k in ("translated_text", "confidence", "translation_method")}
 
     # ΓöÇΓöÇ enΓåötl pipeline: Google ΓåÆ OPUS-MT ΓåÆ internal steps as last resort ΓöÇΓöÇ
