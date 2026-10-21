@@ -1,0 +1,395 @@
+# Bulos Grammar Rules Template
+# 
+# This file contains candidate grammar rules extracted from Day 3 analysis.
+# ALL RULES DEFAULT TO NOT APPROVED until validated by native Bulos speakers.
+#
+# Status values:
+#   - not_approved: Cannot be used for generation (default)
+#   - pending_validation: Awaiting native speaker review
+#   - approved: Validated and safe for use
+#   - deprecated: No longer recommended
+#
+# Evidence strength: insufficient, weak, moderate, strong
+# Confidence level: low, medium, high
+
+version: "1.0"
+engine: "Bulos Grammar Rules Engine"
+source: "Day 3 Grammar Analysis (sentence.json)"
+
+rules:
+  # ────────────────────────────────────────────────────────────────────────
+  # RULE 1: Predicate Adjective Construction
+  # ────────────────────────────────────────────────────────────────────────
+  - rule_id: "GR001"
+    rule_type: "adjective"
+    name: "Predicate Adjective with 'i' Marker"
+    description: "Adjective precedes noun with 'i' marker between them"
+    pattern: "[Adjective] + i + [Noun]"
+    
+    status: "not_approved"
+    validated_by: null
+    validation_date: null
+    allow_generation: false  # NOT APPROVED - cannot generate
+    allow_validation: true   # Can be used to check patterns
+    
+    confidence_level: "medium"
+    evidence_strength: "moderate"
+    
+    required_markers:
+      - "i"
+    
+    word_order: "Adjective + i + Noun"
+    
+    substitutable_positions:
+      - "adjective"
+      - "noun"
+    
+    examples:
+      - bulos: "Malawwa i kalasan"
+        filipino: "Malawak ang gubat"
+        english: "The forest is vast"
+        source_reference: "sentence.json:79"
+        notes: null
+      
+      - bulos: "Masampat i Dapis"
+        filipino: "Maganda si Dapis"
+        english: "Dapis is beautiful"
+        source_reference: "sentence.json:80"
+        notes: null
+      
+      - bulos: "Hanga i beloy ni patod"
+        filipino: "Malaki ang bahay ng lalaki"
+        english: "The house of man is big"
+        source_reference: "sentence.json:81"
+        notes: "Contains possessive construction as well"
+      
+      - bulos: "Bowon i demit na"
+        filipino: "Bago ang damit niya"
+        english: "Her/His dress is new"
+        source_reference: "sentence.json:66"
+        notes: null
+    
+    known_limitations:
+      - "Only 5 verified examples"
+      - "Unknown if adjective can follow noun"
+      - "Unknown how comparative/superlative forms work"
+      - "Need to verify with more adjectives"
+    
+    implementation_notes: |
+      This pattern shows consistent structure across examples.
+      Before enabling generation:
+      1. Verify word order flexibility with native speakers
+      2. Test with more adjectives (colors, sizes, qualities)
+      3. Confirm 'i' is mandatory in this construction
+      4. Learn comparative/superlative formation
+
+  # ────────────────────────────────────────────────────────────────────────
+  # RULE 2: Question Formation with Question Words
+  # ────────────────────────────────────────────────────────────────────────
+  - rule_id: "GR002"
+    rule_type: "question"
+    name: "WH-Question with Initial Question Word"
+    description: "Question word at sentence-initial position followed by marker"
+    pattern: "[Question Word] + [i/ka] + [Predicate]"
+    
+    status: "not_approved"
+    validated_by: null
+    validation_date: null
+    allow_generation: false
+    allow_validation: true
+    
+    confidence_level: "high"
+    evidence_strength: "strong"
+    
+    required_markers:
+      - "question_word"  # Anu, Inú, Dênu, Kapide, etc.
+    
+    word_order: "Question Word + Marker + Predicate"
+    
+    substitutable_positions:
+      - "question_word"
+      - "predicate"
+    
+    examples:
+      - bulos: "Ànu i ngalan mu?"
+        filipino: "Ano'ng pangalan mo?"
+        english: "What is your name?"
+        source_reference: "sentence.json:42"
+        notes: "Question word: Ànu (what), marker: i"
+      
+      - bulos: "Inú i inoy mo?"
+        filipino: "Sino ang nanay mo?"
+        english: "Who is your mother?"
+        source_reference: "sentence.json:116"
+        notes: "Question word: Inú (who), marker: i"
+      
+      - bulos: "Dênu ka paagaw?"
+        filipino: "Saan ka pupunta?"
+        english: "Where are you going?"
+        source_reference: "sentence.json:118"
+        notes: "Question word: Dênu (where), marker: ka"
+      
+      - bulos: "Kapide ka nototul?"
+        filipino: "Kailan ka aalis?"
+        english: "When are you leaving?"
+        source_reference: "sentence.json:41"
+        notes: "Question word: Kapide (when), marker: ka"
+      
+      - bulos: "Pidê man i bile mu de alit?"
+        filipino: "Magkano ang bili mo sa damit?"
+        english: "How much is the dress?"
+        source_reference: "sentence.json:120"
+        notes: "Question word: Pidê (how much), marker: i"
+      
+      - bulos: "Pide kamu a magiwinale?"
+        filipino: "Ilan kayong magkakapatid?"
+        english: "How many siblings are you in the family?"
+        source_reference: "sentence.json:121"
+        notes: "Question word: Pide (how many)"
+    
+    known_limitations:
+      - "When to use 'i' vs 'ka' marker is unclear"
+      - "Yes/no question formation unknown"
+      - "Question word list may be incomplete"
+      - "End-of-sentence question placement not verified"
+    
+    implementation_notes: |
+      Strong pattern consistency but needs clarification:
+      1. Rule for choosing 'i' vs 'ka' after question word
+      2. How to form yes/no questions (no question word)
+      3. Can question words appear at end of sentence?
+      4. Are there other question particles?
+
+  # ────────────────────────────────────────────────────────────────────────
+  # RULE 3: Topic-Comment Structure with 'ay'
+  # ────────────────────────────────────────────────────────────────────────
+  - rule_id: "GR003"
+    rule_type: "marker"
+    name: "Topic Marker 'ay' Construction"
+    description: "Topic marked with 'ay', separating subject from predicate"
+    pattern: "[Subject] + ay + [Predicate]"
+    
+    status: "not_approved"
+    validated_by: null
+    validation_date: null
+    allow_generation: false
+    allow_validation: true
+    
+    confidence_level: "medium"
+    evidence_strength: "strong"
+    
+    required_markers:
+      - "ay"
+    
+    word_order: "Subject + ay + Predicate"
+    
+    substitutable_positions:
+      - "subject"
+      - "predicate"
+    
+    examples:
+      - bulos: "Ikitam ay Magsolat"
+        filipino: "Magbasa at Sumulat Tayo"
+        english: "Let us Read and Write"
+        source_reference: "sentence.json:1"
+        notes: null
+      
+      - bulos: "I Surot a Dumaget Bulos ay te dalawampu't tiluwan (23) a tinog"
+        filipino: "Ang Wikang Dumaget Bulos ay may dalawampu't tatlong tunog"
+        english: "There are twenty-three (23) sounds in the Dumaget Bulos Language"
+        source_reference: "sentence.json:4"
+        notes: "Complex subject with multiple modifiers"
+      
+      - bulos: "I gebigkas de mga patenig a Surot a Dumaget Bulos ay tolad di de gebigkas de mga patenig a alpabetu a Pilipenu"
+        filipino: "Ang pagbigkas sa mga patinig ng Wikang Bulos ay tulad din sa pagbigkas sa mga patinig ng alpabetong Filipino"
+        english: "All the vowels have the same sounds as those vowels in the Filipino alphabet"
+        source_reference: "sentence.json:5"
+        notes: "Very long, complex sentence"
+    
+    known_limitations:
+      - "Can 'ay' be omitted?"
+      - "Can word order be inverted (Predicate + ay + Subject)?"
+      - "Is this formal/written only or also spoken?"
+      - "Limited to 47 examples, mostly linguistic descriptions"
+    
+    implementation_notes: |
+      Pattern similar to Filipino but needs verification:
+      1. Is 'ay' mandatory or optional?
+      2. Does omitting 'ay' change meaning or just emphasis?
+      3. Word order flexibility in casual speech?
+      4. Can be used for emphasis/topicalization?
+
+  # ────────────────────────────────────────────────────────────────────────
+  # RULE 4: Possessive Construction with 'ni' or 'de'
+  # ────────────────────────────────────────────────────────────────────────
+  - rule_id: "GR004"
+    rule_type: "possession"
+    name: "Genitive Marker 'ni' or 'de'"
+    description: "Possession marked with 'ni' (personal) or 'de' (general)"
+    pattern: "[Possessed] + ni/de + [Possessor]"
+    
+    status: "not_approved"
+    validated_by: null
+    validation_date: null
+    allow_generation: false
+    allow_validation: true
+    
+    confidence_level: "medium"
+    evidence_strength: "strong"
+    
+    required_markers:
+      - "ni_or_de"
+    
+    word_order: "Possessed + Marker + Possessor"
+    
+    substitutable_positions:
+      - "possessed"
+      - "possessor"
+    
+    examples:
+      - bulos: "I tinog ni tetik e"
+        filipino: "Ang tunog ng titik e"
+        english: "The sounds of e"
+        source_reference: "sentence.json:14"
+        notes: "Uses 'ni' with inanimate possessor"
+      
+      - bulos: "Hanga i beloy ni patod"
+        filipino: "Malaki ang bahay ng lalaki"
+        english: "The house of man is big"
+        source_reference: "sentence.json:81"
+        notes: "Uses 'ni' with human possessor"
+      
+      - bulos: "Pinangan ni adew i betag"
+        filipino: "Kinain ng unggoy ang saging"
+        english: "Monkey ate the banana"
+        source_reference: "sentence.json:85"
+        notes: "Uses 'ni' with animal agent"
+      
+      - bulos: "Panuntonan de Pagsolat ni Surot a Dumaget Bulos"
+        filipino: "Gabay sa Pagtuturo ng Wikang Dumaget Bulos"
+        english: "A Guide to Teaching the Dumaget Bulos Language"
+        source_reference: "sentence.json:2"
+        notes: "Uses both 'de' and 'ni' in complex phrase"
+    
+    known_limitations:
+      - "Exact distribution rule for 'ni' vs 'de' unclear"
+      - "100 examples but pattern not fully understood"
+      - "Can order be reversed?"
+      - "Are there other possessive markers?"
+    
+    implementation_notes: |
+      Most frequent construction but needs clarification:
+      1. When exactly to use 'ni' vs 'de'?
+      2. Is it personal/common noun distinction?
+      3. Or animate/inanimate distinction?
+      4. Or proper noun vs common noun?
+      5. Examples show 'ni' used broadly, rule unclear
+
+  # ────────────────────────────────────────────────────────────────────────
+  # RULE 5: Imperative with Inclusive Pronoun 'tam'
+  # ────────────────────────────────────────────────────────────────────────
+  - rule_id: "GR005"
+    rule_type: "imperative"
+    name: "Inclusive Imperative with 'tam'"
+    description: "Imperative with inclusive 'us' pronoun"
+    pattern: "[Verb] + tam + [Object]"
+    
+    status: "not_approved"
+    validated_by: null
+    validation_date: null
+    allow_generation: false
+    allow_validation: true
+    
+    confidence_level: "low"
+    evidence_strength: "weak"
+    
+    required_markers:
+      - "tam"
+    
+    word_order: "Verb + tam + Object"
+    
+    substitutable_positions:
+      - "verb"
+      - "object"
+    
+    examples:
+      - bulos: "Amitin tam un ikan"
+        filipino: "Kuhanin natin ang isda"
+        english: "Let us get the fish"
+        source_reference: "sentence.json:154"
+        notes: null
+      
+      - bulos: "Dian tam ni kolay un larawen"
+        filipino: "Lagyan natin ng kulay ang larawan"
+        english: "Let us color the picture"
+        source_reference: "sentence.json:155"
+        notes: null
+      
+      - bulos: "Biyen tam ni sinaing un manganak"
+        filipino: "Bigyan natin ng kanin ang mga bata"
+        english: "Let us give rice to the children"
+        source_reference: "sentence.json:156"
+        notes: null
+    
+    known_limitations:
+      - "Only 3 examples - insufficient data"
+      - "Verb affixation pattern unknown"
+      - "Singular imperative form unknown"
+      - "Negative imperative formation unknown"
+      - "'tam' position flexibility unknown"
+      - "Exclusive 'we' pronoun unknown"
+    
+    implementation_notes: |
+      Insufficient data for safe implementation:
+      1. Need more verb examples to understand affixation
+      2. How to form singular imperatives?
+      3. How to form negative imperatives?
+      4. Can 'tam' move to other positions?
+      5. What is exclusive 'we' pronoun?
+      6. Recommend deferring until more data collected
+
+# ────────────────────────────────────────────────────────────────────────────
+# METADATA
+# ────────────────────────────────────────────────────────────────────────────
+
+metadata:
+  analysis_date: "2026-10-17"
+  source_dataset: "sentence.json"
+  total_sentences_analyzed: 200
+  extraction_method: "Day 3 Grammar Analysis"
+  
+  evidence_summary:
+    - rule: "GR001"
+      examples: 5
+      recommendation: "Medium priority - test with native speakers"
+    
+    - rule: "GR002"
+      examples: 10
+      recommendation: "High priority - strong pattern, needs marker rule"
+    
+    - rule: "GR003"
+      examples: 47
+      recommendation: "Medium priority - needs word order validation"
+    
+    - rule: "GR004"
+      examples: 100
+      recommendation: "Medium priority - needs ni/de distribution rule"
+    
+    - rule: "GR005"
+      examples: 3
+      recommendation: "Low priority - insufficient data, defer"
+  
+  next_steps:
+    - "Send DAY3_NATIVE_SPEAKER_VALIDATION.md to Bulos speakers"
+    - "Collect validation responses"
+    - "Update rule status based on feedback"
+    - "Activate approved rules one at a time"
+    - "Test each rule with synthetic examples before production use"
+  
+  safety_notes:
+    - "ALL RULES DEFAULT TO NOT APPROVED"
+    - "No rule can generate translations until approved"
+    - "Validation-only mode safe for pattern checking"
+    - "Test extensively with native speakers before activation"
+    - "Never assume Bulos follows Filipino grammar exactly"
+    - "Preserve Bulos diacritics in all implementations"

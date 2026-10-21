@@ -167,9 +167,8 @@ models/translation/*.h5
 models/translation/*.pkl
 models/translation/*.keras
 
-# LSTM model files (replaced by OPUS-MT CTranslate2)
+# LSTM model files (removed from backend architecture - Day 7)
 models/lstm/
-services/lstm_translator.py
 
 # Unused model files
 seq2seq_translation_model.keras
@@ -248,3 +247,108 @@ __marimo__/
 # Internal Files
 /document
 /tests
+
+# Temporary test files and analysis scripts (backup cleanup)
+*_test.py
+*_verification.py
+*_diagnostic.py
+analyze_*.py
+benchmark_*.py
+check_*.py
+debug_*.py
+diagnose_*.py
+evaluate_*.py
+experiment_*.py
+extract_*.py
+find_*.py
+investigate_*.py
+quick_test.py
+test_*.py
+verify_*.py
+run_tests_simple.py
+pre_backup_verification.py
+
+# Temporary reports and documentation (backup cleanup)
+*_REPORT.md
+*_SUMMARY.md
+*_ANALYSIS.md
+*_AUDIT.md
+*_COMPLETE.md
+*_CHECKLIST.md
+*_GUIDE.md
+*_INSTRUCTIONS.md
+*_STATUS.md
+*_PLAN.md
+*_SPECIFICATION.md
+ACTUAL_FINDINGS_REPORT.md
+BACKEND_RECOVERY_COMPARISON_REPORT.md
+CHARACTER_LIMIT_ANALYSIS_REPORT.md
+COLAB_*.md
+CONCURRENCY_TEST_ANALYSIS.md
+CRITICAL_ISSUES_FOUND.md
+DAY*.md
+DEPLOYMENT_GUIDE.md
+EN_BUL_*.md
+FALSE_POSITIVE_FIX_COMPLETE.md
+FINAL_*.md
+FUZZY_*.md
+GRAMMAR_INTEGRATION_COMPLETE.md
+IMPLEMENTATION_REPORT.md
+L1_*.md
+LSTM_*.md
+M1.7_*.md
+M3_*.md
+PATHS_AND_VERIFICATION.md
+PHASE_*.md
+PRE_BACKUP_VERIFICATION.json
+READY_TO_TRAIN_CHECKLIST.md
+RECOVERY_STATUS_AND_NEXT_STEPS.md
+TEST_BASELINE_CLEANUP_REPORT.md
+
+# Temporary data files
+*.ipynb
+*_output.txt
+*_results.json
+benchmark_results.json
+corpus_*.txt
+corpus_*.json
+experiment_output.txt
+grammar_patterns_output.txt
+mongodb_additional_words.*
+threshold_evaluation_results.txt
+translation_failures_output.txt
+
+# Backup directories
+backup_comparison/
+backups/
+bulos-backend-copy.git/
+experiments/
+
+# LSTM archived data (removed from architecture)
+data/lstm_*/
+models/lstm/
+
+# Workspace snapshots
+workspace_*.patch
+workspace_*.txt
+
+# Scripts directory temporary files
+scripts/analyze_*.py
+scripts/audit_*.py
+scripts/benchmark_*.py
+scripts/check_*.py
+scripts/compare_*.py
+scripts/debug_*.py
+scripts/detailed_*.py
+scripts/export_*.py
+scripts/extract_*.py
+scripts/find_*.py
+scripts/inspect_*.py
+scripts/l1_*.py
+scripts/m3_*.py
+scripts/prepare_*.py
+scripts/test_*.py
+scripts/train_*.py
+scripts/validate_*.py
+scripts/verify_*.py
+scripts/*_output.txt
